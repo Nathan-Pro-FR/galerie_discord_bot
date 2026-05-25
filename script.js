@@ -2,6 +2,7 @@
 const galleryGrid = document.getElementById('gallery-grid');
 const mainGalerie = document.getElementById('main-galerie');
 
+// Conservé ici pour plus tard
 const HASH_VALIDE = "bbc733059449d0c366316f888f5b0c84ccc63e700df360d9b9b07bbe10b0233d";
 
 async function générerSHA256(chaine) {
@@ -12,6 +13,13 @@ async function générerSHA256(chaine) {
 }
 
 async function verifierMotDePasse() {
+    // --- MODIFICATION ICI : On force l'accès direct sans demander de mot de passe ---
+    if (mainGalerie) mainGalerie.style.display = 'block';
+    chargerGalerie();
+    return;
+    // --------------------------------------------------------------------------------
+    
+    // Tout le reste du code est conservé en dessous mais ne s'exécutera pas pour l'instant
     if (sessionStorage.getItem('galerie_authentifiee') === 'true') {
         if (mainGalerie) mainGalerie.style.display = 'block';
         chargerGalerie();
@@ -36,7 +44,7 @@ async function verifierMotDePasse() {
         chargerGalerie();
     } else {
         alert("❌ Mot de passe incorrect !");
-        verifierMotDePasse(); // Relance la demande
+        verifierMotDePasse(); 
     }
 }
 
@@ -77,6 +85,7 @@ async function chargerGalerie() {
                 video.src = url;
                 video.controls = true;
                 video.preload = "metadata";
+                video.className = "w-full h-full object-cover";
                 card.appendChild(video);
             } else {
                 const img = document.createElement('img');
