@@ -1,50 +1,138 @@
+/* ==========================================================================
+   STYLE CYBERPUNK NÉON - CHAMBRE NOIRE
+   ========================================================================== */
+
+/* Importation d'une police plus futuriste / géométrique */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+
 /* Styles Généraux */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
     margin: 0;
     padding: 0;
-    background-color: #1e1f22; /* Couleur sombre style Discord */
-    color: #f2f3f5;
+    background-color: #050508; /* Noir très profond / spatial */
+    color: #e2e8f0;
+    /* Léger grain de fond style rétro-futuriste optionnel */
+    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 6px 100%;
 }
 
+/* Header */
 header {
     text-align: center;
-    padding: 2rem;
-    background-color: #2b2d31;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(180deg, #0d0d14 0%, #050508 100%);
+    border-b: 2px solid #a855f7;
+    position: relative;
+    /* Ligne de néon sous le header */
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.25);
+}
+
+header p {
+    color: #94a3b8;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 h1 {
+    font-family: 'Orbitron', sans-serif;
     margin: 0;
-    color: #5865f2; /* Bleu Discord */
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    /* Dégradé violet à rose fuchsia sur le texte */
+    background: linear-gradient(to right, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Effet de lueur néon textuelle */
+    filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.6));
+    animation: neonPulseTitre 3s infinite alternate;
 }
 
 /* Grille de la Galerie */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    gap: 30px; /* Plus d'espace pour laisser respirer les halos lumineux */
+    padding: 40px 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Conteneur de chaque média */
+/* Conteneur de chaque média (Cartes) */
 .media-card {
-    background-color: #2b2d31;
-    border-radius: 8px;
+    background-color: #0d0d14; /* Fond de carte sombre contrasté */
+    border-radius: 16px; /* Angles plus doux et modernes */
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
+    position: relative;
+    /* Bordure initiale violette sombre */
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+/* Effet de survol de la carte (Hover) */
 .media-card:hover {
-    transform: scale(1.03);
+    transform: translateY(-8px) scale(1.02);
+    /* Changement de couleur de la bordure en Rose Néon flash */
+    border-color: #ec4899;
+    /* Halo lumineux externe ultra prononcé */
+    box-shadow: 0 0 25px rgba(236, 72, 153, 0.45), 
+                inset 0 0 10px rgba(236, 72, 153, 0.2);
 }
 
 /* Adaptation des images et vidéos */
 .media-card img, .media-card video {
     width: 100%;
-    height: 250px;
-    object-fit: cover; /* Aligne et coupe proprement le média */
+    height: 280px; /* Légèrement plus grand */
+    object-fit: cover;
     display: block;
+    /* Légère désaturation de base pour le style argentique */
+    filter: brightness(0.85) contrast(1.05);
+    transition: all 0.4s ease-in-out;
+}
+
+/* Quand on survole la carte, l'image s'éclaire et s'anime */
+.media-card:hover img, .media-card:hover video {
+    filter: brightness(1.05) contrast(1.1);
+}
+
+/* ==========================================================================
+   ANIMATIONS & EFFETS SUPPLÉMENTAIRES
+   ========================================================================== */
+
+/* Animation de pulsation subtile pour le titre principal */
+@keyframes neonPulseTitre {
+    0% {
+        filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.5));
+    }
+    100% {
+        filter: drop-shadow(0 0 14px rgba(236, 72, 153, 0.85));
+    }
+}
+
+/* Style optionnel si tu as ou ajoutes un bouton sur le site (ex: Déconnexion) */
+button {
+    font-family: 'Orbitron', sans-serif;
+    background: transparent;
+    color: #f472b6;
+    border: 1px solid #f472b6;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #f472b6;
+    color: #050508;
+    box-shadow: 0 0 15px #f472b6;
 }
