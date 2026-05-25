@@ -1,11 +1,44 @@
 // Sélection de la grille HTML où intégrer les médias
 const galleryGrid = document.getElementById('gallery-grid');
+const mainGalerie = document.getElementById('main-galerie');
 
-/**
- * Fonction simplifiée pour vérifier si un lien correspond à une vidéo
- * @param {string} url - Le lien du média à tester
- * @returns {boolean} - Vrai si c'est une vidéo, faux sinon
- */
+const HASH_VALIDE = "59cf0d210dfa6c76dbcb129997cfda86cf103598beabf58062ec87ad9fa96985";
+
+async function générerSHA256(chaine) {
+    const utf8 = new TextEncoder().encode(chaine);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(bytes => bytes.toString(16).padStart(2, '0')).join('');
+}
+
+async function verifierMotDePasse() {
+    if (sessionStorage.getItem('galerie_authentifiee') === 'true') {
+        if (mainGalerie) mainGalerie.style.display = 'block';
+        chargerGalerie();
+        return;
+    }
+
+   
+    const mdpSaisi = prompt("🔒 Cet espace est privé. Veuillez entrer le mot de passe d'accès :");
+
+    if (mdpSaisi === null) {
+        galleryGrid.innerHTML = `<p style="color: gray; text-align: center; grid-column: 1/-1; padding: 40px;">Accès refusé. Veuillez rafraîchir la page pour réessayer.</p>`;
+        if (mainGalerie) mainGalerie.style.display = 'block';
+        return;
+    }
+    const hashSaisi = await générerSHA256(mdpSaisi);
+
+    if (hashSaisi === HASH_VALIDE) {
+        sessionStorage.setItem('galerie_authentifiee', 'true');
+        if (mainGalerie) mainGalerie.style.display = 'block';
+        chargerGalerie();
+    } else {
+        // Mauvais mot de passe
+        alert("❌ Mot de passe incorrect !");
+        verifierMotDePasse(); // Relance la demande
+    }
+}
+
 function isVideo(url) {
     const urlMinuscule = url.toLowerCase();
     return urlMinuscule.includes('.mp4') || 
@@ -14,9 +47,6 @@ function isVideo(url) {
            urlMinuscule.includes('.ogg');
 }
 
-/**
- * Fonction principale qui récupère les données et affiche la galerie
- */
 async function chargerGalerie() {
     try {
         // 1. Récupération du fichier JSON généré par GitHub Actions
@@ -37,10 +67,9 @@ async function chargerGalerie() {
             return;
         }
 
-        // Vider la grille avant d'ajouter les éléments (évite les doublons)
-        galleryGrid.innerHTML = '';
+        galleryGrid.innerHTML = ''; // Vide le message de chargement
 
-        // 3. Boucle sur chaque lien pour créer les éléments visuels
+        // 3. Parcours des URLs pour créer les éléments HTML
         mediaUrls.forEach(url => {
             const card = document.createElement('div');
             card.className = 'media-card';
@@ -77,5 +106,5 @@ async function chargerGalerie() {
     }
 }
 
-// Lancement automatique de la fonction au chargement de la page
-chargerGalerie();
+// Lancement de la vérification de sécurité au chargement de la page
+document.addEventListener('DOMContentLoaded', verifierMotDePasse);
