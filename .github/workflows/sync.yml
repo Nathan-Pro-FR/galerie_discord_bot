@@ -3,7 +3,7 @@ name: Synchronisation Galerie Discord
 on:
   workflow_dispatch: # Permet de le lancer à la main avec le bouton "Run workflow"
   schedule:
-    - cron: '0 * * * *' # Se lance automatiquement toutes les heures
+    - cron: '* * * * *' # Se lance automatiquement toutes les heures
 
 permissions:
   contents: write
